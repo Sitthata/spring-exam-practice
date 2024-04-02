@@ -1,6 +1,7 @@
 package com.example.springexampractice.controller;
 
 import com.example.springexampractice.model.Employee;
+import com.example.springexampractice.model.dto.PageDTO;
 import com.example.springexampractice.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,11 +17,11 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @GetMapping("")
-    public ResponseEntity<List<Employee>> getAll(@RequestParam(defaultValue = "") String sortDirection,
-                                                 @RequestParam(defaultValue = "") String sortBy,
-                                                 @RequestParam(defaultValue = "-1") int page,
-                                                 @RequestParam(defaultValue = "-1") int size) {
-        return ResponseEntity.ok(employeeService.findAll(sortBy, sortDirection, page, size));
+    public ResponseEntity<PageDTO<Employee>> getAll(@RequestParam(defaultValue = "") String sortDirection,
+                                          @RequestParam(defaultValue = "") String sortBy,
+                                          @RequestParam(defaultValue = "-1") int page,
+                                          @RequestParam(defaultValue = "-1") int size) {
+        return ResponseEntity.ok(employeeService.findAllPaginated(sortBy, sortDirection, page, size));
     }
 
     @GetMapping("/{id}")

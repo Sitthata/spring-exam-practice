@@ -1,9 +1,11 @@
 package com.example.springexampractice.service;
 
 import com.example.springexampractice.model.Employee;
+import com.example.springexampractice.model.dto.PageDTO;
 import com.example.springexampractice.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -16,15 +18,30 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class EmployeeService {
     private final EmployeeRepository employeeRepository;
+    private final ModelMapper modelMapper;
 
-    public List<Employee> findAll(String sortBy, String sortDirection, int page, int size) {
-        Sort sort = sortBy.isEmpty() ? Sort.unsorted() : Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
+    public List<Employee> findAll() {
+        return employeeRepository.findAll();
+    }
+
+    public PageDTO<Employee> findAllPaginated(String sortBy, String sortDirection, int page, int size) {
         if (page == -1 && size == -1) {
-            return employeeRepository.findAll();
+            return PageDTO.<Employee>builder()
+                    .content(employeeRepository.findAll())
+                    .build();
         }
+        Sort sort = sortBy.isEmpty() ? Sort.unsorted() : Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
         Pageable pageable = PageRequest.of(page, size, sort);
-
-        return employeeRepository.findAll(pageable).stream().toList();
+        Page<Employee> employeePage = employeeRepository.findAll(pageable);
+        return PageDTO.<Employee>builder()
+                .content(employeePage.getContent())
+                .totalElements(employeePage.getTotalElements())
+                .totalPages(employeePage.getTotalPages())
+                .first(employeePage.isFirst())
+                .last(employeePage.isLast())
+                .size(employeePage.getSize())
+                .number(employeePage.getNumber())
+                .build();
     }
 
     public Employee findById(Long id) {
