@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -14,11 +16,12 @@ import java.util.List;
 @Builder
 public class PageDTO<T> {
     private List<T> content;
-    private int totalPages;
-    private long totalElements;
-    private int size;
-    private boolean first;
-    private boolean last;
+    private Pageable pageable;
+    private Integer totalPages;
+    private Long totalElements;
+    private Integer size;
+    private boolean isLast;
+    private boolean isFirst;
 
     @JsonIgnore
     private Integer number;

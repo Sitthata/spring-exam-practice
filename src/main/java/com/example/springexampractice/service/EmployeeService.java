@@ -35,12 +35,7 @@ public class EmployeeService {
         Page<Employee> employeePage = employeeRepository.findAll(pageable);
         return PageDTO.<Employee>builder()
                 .content(employeePage.getContent())
-                .totalElements(employeePage.getTotalElements())
-                .totalPages(employeePage.getTotalPages())
-                .first(employeePage.isFirst())
-                .last(employeePage.isLast())
-                .size(employeePage.getSize())
-                .number(employeePage.getNumber())
+                .pageable(employeePage.getPageable())
                 .build();
     }
 

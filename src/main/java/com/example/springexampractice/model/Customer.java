@@ -1,35 +1,58 @@
 package com.example.springexampractice.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "customers")
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class Customer {
     @Id
-    @Column(name = "customerNumber")
-    private String id;
+    @Column(name = "customerNumber", nullable = false)
+    private Integer id;
+
+    @Column(name = "customerName", nullable = false, length = 50)
     private String customerName;
+
+    @Column(name = "contactLastName", nullable = false, length = 50)
     private String contactLastName;
+
+    @Column(name = "contactFirstName", nullable = false, length = 50)
     private String contactFirstName;
-    private BigDecimal creditLimit;
+
+    @Column(name = "phone", nullable = false, length = 50)
     private String phone;
+
+    @Column(name = "addressLine1", nullable = false, length = 50)
     private String addressLine1;
+
+    @Column(name = "addressLine2", length = 50)
     private String addressLine2;
+
+    @Column(name = "city", nullable = false, length = 50)
     private String city;
+
+    @Column(name = "state", length = 50)
     private String state;
+
+    @Column(name = "postalCode", length = 15)
     private String postalCode;
+
+    @Column(name = "country", nullable = false, length = 50)
     private String country;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "salesRepEmployeeNumber")
-    private Employee salesRepEmployee;
+    private Employee salesRepEmployeeNumber;
+
+    @OneToMany(mappedBy = "customerNumber")
+    private List<Order> orders = new ArrayList<>();
+
 }

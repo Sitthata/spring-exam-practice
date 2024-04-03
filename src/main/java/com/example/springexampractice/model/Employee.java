@@ -3,10 +3,13 @@ package com.example.springexampractice.model;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "employees")
-@Data
+@Getter
+@Setter
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id"
