@@ -1,9 +1,10 @@
 package com.example.springexampractice.service;
 
-import com.example.springexampractice.model.Customer;
 import com.example.springexampractice.model.dto.CustomerDTO;
+import com.example.springexampractice.model.dto.OrderDTO;
 import com.example.springexampractice.model.dto.PageDTO;
 import com.example.springexampractice.repository.CustomerRepository;
+import com.example.springexampractice.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -13,12 +14,12 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CustomerService {
     private final CustomerRepository customerRepository;
+    private final OrderRepository orderRepository;
     public final ModelMapper modelMapper;
     public PageDTO<CustomerDTO> getCustomers(Integer page, Integer size) {
         if (page == -1 && size == -1) {
@@ -44,4 +45,9 @@ public class CustomerService {
                 .build();
     }
 
+    public List<OrderDTO> getOrders(Integer id) {
+        return orderRepository.findAllByCustomerNumberId(id).stream()
+                .map((element) -> modelMapper.map(element, OrderDTO.class))
+                .toList();
+    }
 }
