@@ -1,6 +1,7 @@
 package com.example.springexampractice.service;
 
 import com.example.springexampractice.model.Employee;
+import com.example.springexampractice.model.dto.EmployeeDTO;
 import com.example.springexampractice.model.dto.PageDTO;
 import com.example.springexampractice.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
@@ -45,14 +46,15 @@ public class EmployeeService {
         );
     }
 
-    public Employee add(Employee employee) {
+    public Employee add(EmployeeDTO employee) {
         if (employee.getId() == null) {
             throw new RuntimeException("No id");
         }
         if (employeeRepository.existsById(employee.getId())) {
             throw new RuntimeException("This employee is already exists");
         }
-        return employeeRepository.save(employee);
+        Employee employeeEntity = modelMapper.map(employee, Employee.class);
+        return employeeRepository.save(employeeEntity);
     }
 
     public Employee update(Employee employee, Long id) {

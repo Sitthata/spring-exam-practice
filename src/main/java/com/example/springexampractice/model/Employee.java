@@ -2,7 +2,8 @@ package com.example.springexampractice.model;
 
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,8 +17,8 @@ import lombok.Setter;
 )
 public class Employee {
     @Id
-    @Column(name = "employeeNumber")
-    private Long id;
+    @Column(name = "employeeNumber", nullable = false)
+    private Integer id;
 
     @Column(name = "lastName")
     private String lastName;
