@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,12 +27,12 @@ public class EmployeeService {
     }
 
     public PageDTO<Employee> findAllPaginated(String sortBy, String sortDirection, int page, int size) {
+        Sort sort = sortBy.isEmpty() ? Sort.unsorted() : Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
         if (page == -1 && size == -1) {
             return PageDTO.<Employee>builder()
-                    .content(employeeRepository.findAll())
+                    .content(employeeRepository.findAll(sort))
                     .build();
         }
-        Sort sort = sortBy.isEmpty() ? Sort.unsorted() : Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<Employee> employeePage = employeeRepository.findAll(pageable);
         return PageDTO.<Employee>builder()
@@ -57,7 +58,7 @@ public class EmployeeService {
         return employeeRepository.save(employeeEntity);
     }
 
-    public Employee update(Employee employee, Long id) {
+    public Employee update(Employee employee, Integer id) {
         if (!Objects.equals(employee.getId(), id)) {
             throw new RuntimeException("Employee id doesn't match");
         }
